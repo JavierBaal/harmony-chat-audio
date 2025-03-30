@@ -3,13 +3,15 @@ import React, { useState } from 'react';
 import MainLayout from '@/components/layout/MainLayout';
 import ChatInterface from '@/components/chat/ChatInterface';
 import StatusPanel from '@/components/audio/StatusPanel';
+import TrackList from '@/components/audio/TrackList';
 import { useToast } from '@/hooks/use-toast';
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 
 const Index = () => {
   const [projectStatus, setProjectStatus] = useState({
     bpm: 120,
     currentTime: "00:00:00",
-    trackCount: 3,
+    trackCount: 4,
     audioLevel: 75
   });
   
@@ -28,7 +30,17 @@ const Index = () => {
         </header>
         
         <div className="flex-1 overflow-hidden">
-          <ChatInterface />
+          <ResizablePanelGroup direction="horizontal">
+            <ResizablePanel defaultSize={25} minSize={20}>
+              <TrackList />
+            </ResizablePanel>
+            
+            <ResizableHandle withHandle />
+            
+            <ResizablePanel defaultSize={75}>
+              <ChatInterface />
+            </ResizablePanel>
+          </ResizablePanelGroup>
         </div>
       </div>
     </MainLayout>
