@@ -5,44 +5,39 @@
 
 @layer base {
   :root {
-    --background: 222 47% 11%;
+    --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-
-    --card: 222 47% 11%;
+    
+    --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
-
-    --popover: 222 47% 11%;
+    
+    --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-
-    --primary: 252 87% 67%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 217 33% 17%;
+    
+    --primary: 270 100% 70%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    
+    --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20% 65%;
-
-    --accent: 252 87% 67%;
+    
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    
+    --accent: 270 100% 70%;
     --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 63% 31%;
+    
+    --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
-    --ring: 212 27% 84%;
-
+    
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 270 100% 70%;
+    
     --radius: 0.5rem;
 
-    --sidebar-background: 222 47% 11%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 252 87% 67%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 222 47% 15%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 222 47% 15%;
-    --sidebar-ring: 252 87% 67%;
+    --tehoria-accent: #9b87f5;
+    --tehoria-dark: #1A1F2C;
+    --tehoria-darker: #141922;
   }
 }
 
@@ -50,41 +45,37 @@
   * {
     @apply border-border;
   }
-
   body {
-    @apply bg-tehoria-dark text-foreground antialiased;
-  }
-  
-  /* Custom scrollbar for the entire app */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    @apply bg-tehoria-darker;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    @apply bg-tehoria-muted rounded-full;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-tehoria-accent;
+    @apply bg-background text-foreground;
   }
 }
 
 @layer components {
-  .visualizer-bar {
-    @apply bg-tehoria-accent;
-    animation: waveform 1s ease-in-out infinite;
-  }
-  
-  .input-clean {
-    @apply bg-transparent border-none focus:outline-none focus:ring-0;
-  }
-  
   .glass-panel {
-    @apply backdrop-blur-md bg-white/5 border border-white/10 rounded-lg;
+    @apply bg-tehoria-dark/60 border border-white/10 rounded-md backdrop-blur-sm;
   }
 }
+
+/* Animación para las barras del visualizador de audio */
+.visualizer-bar {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+/* Estilos para las clases de altura para las barras del visualizador */
+.h-1 { height: 10%; }
+.h-2 { height: 20%; }
+.h-3 { height: 30%; }
+.h-4 { height: 40%; }
+.h-5 { height: 50%; }
+.h-6 { height: 60%; }
+.h-7 { height: 70%; }
+.h-8 { height: 80%; }
