@@ -30,14 +30,14 @@ const Index = () => {
         </header>
         
         <div className="flex-1 overflow-hidden">
-          <ResizablePanelGroup direction="horizontal">
-            <ResizablePanel defaultSize={25} minSize={20}>
+          <ResizablePanelGroup direction="vertical">
+            <ResizablePanel defaultSize={40} minSize={20}>
               <TrackList />
             </ResizablePanel>
             
             <ResizableHandle withHandle />
             
-            <ResizablePanel defaultSize={75}>
+            <ResizablePanel defaultSize={60}>
               <ChatInterface />
             </ResizablePanel>
           </ResizablePanelGroup>
