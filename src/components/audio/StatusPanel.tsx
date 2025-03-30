@@ -3,7 +3,7 @@ import React from 'react';
 import { 
   Clock, 
   Music, 
-  Waveform, 
+  BarChart,
   Volume2, 
   Music2 
 } from 'lucide-react';
@@ -33,7 +33,7 @@ const StatusPanel: React.FC<StatusPanelProps> = ({
       
       <div className="flex flex-col items-center">
         <div className="text-xs text-muted-foreground mb-1 flex items-center">
-          <Waveform className="h-3 w-3 mr-1" />
+          <BarChart className="h-3 w-3 mr-1" />
           <span>BPM</span>
         </div>
         <div className="text-lg font-mono">{bpm}</div>
