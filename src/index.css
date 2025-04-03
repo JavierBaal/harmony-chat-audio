@@ -3,79 +3,62 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    
-    --primary: 270 100% 70%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    
-    --accent: 270 100% 70%;
-    --accent-foreground: 210 40% 98%;
-    
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 270 100% 70%;
-    
-    --radius: 0.5rem;
-
-    --tehoria-accent: #9b87f5;
-    --tehoria-dark: #1A1F2C;
-    --tehoria-darker: #141922;
-  }
+:root {
+  --tehoria-accent: #6d28d9;
+  --tehoria-highlight: #7c3aed;
+  --tehoria-dark: #1a1b26;
+  --tehoria-darker: #13141f;
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-tehoria-dark text-white;
   }
 }
 
 @layer components {
   .glass-panel {
-    @apply bg-tehoria-dark/60 border border-white/10 rounded-md backdrop-blur-sm;
+    @apply bg-tehoria-darker bg-opacity-95 border border-tehoria-darker rounded-md;
+  }
+
+  /* Animaciones para la visualización de audio */
+  .visualizer-bar {
+    @apply bg-current rounded-sm;
+    animation: bounceHeight 1.3s ease-in-out infinite alternate;
+  }
+
+  .animate-pulse-soft {
+    animation: pulseSoft 2s infinite ease-in-out;
+  }
+
+  .animate-bounce-subtle {
+    animation: bounceSoft 1s infinite ease-in-out;
   }
 }
 
-/* Animación para las barras del visualizador de audio */
-.visualizer-bar {
-  animation: pulse 1.5s ease-in-out infinite;
+@keyframes bounceHeight {
+  0% {
+    height: 10%;
+  }
+  100% {
+    height: 90%;
+  }
 }
 
-@keyframes pulse {
+@keyframes pulseSoft {
   0%, 100% {
-    transform: scaleY(0.3);
+    opacity: 1;
   }
   50% {
-    transform: scaleY(1);
+    opacity: 0.7;
   }
 }
 
-/* Estilos para las clases de altura para las barras del visualizador */
-.h-1 { height: 10%; }
-.h-2 { height: 20%; }
-.h-3 { height: 30%; }
-.h-4 { height: 40%; }
-.h-5 { height: 50%; }
-.h-6 { height: 60%; }
-.h-7 { height: 70%; }
-.h-8 { height: 80%; }
+@keyframes bounceSoft {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}

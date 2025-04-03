@@ -6,6 +6,15 @@ import AudioVisualizer from './AudioVisualizer';
 import MessageList from './MessageList';
 import { useToast } from '@/hooks/use-toast';
 
+// Creamos una interfaz para el evento personalizado
+interface TrackActivityEvent extends CustomEvent {
+  detail: {
+    trackId: string;
+    action: 'highlight' | 'edit' | 'reset';
+    type?: 'rhythm' | 'melody' | 'atmosphere';
+  };
+}
+
 const ChatInterface = () => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<any[]>([
@@ -15,6 +24,7 @@ const ChatInterface = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isSimulating, setIsSimulating] = useState(false);
   const [simulationStep, setSimulationStep] = useState(0);
+  const [showSimulationButton, setShowSimulationButton] = useState(true);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
@@ -32,6 +42,15 @@ const ChatInterface = () => {
     { role: 'assistant', content: 'Por cierto, he notado que en tus últimas sesiones, cuando trabajamos con este tipo de atmósferas oscuras, solías añadir texturas ambiente sutiles en el fondo. ¿Te gustaría que exploremos algunas ideas para eso? Tengo algunas sugerencias basadas en lo que ha funcionado bien antes.' }
   ];
 
+  // Track activity corresponding to each simulation step
+  const simulationTrackActivity = [
+    { step: 0, trackId: '1', action: 'highlight', type: 'rhythm' }, // Primer mensaje - menciona BPM y techno
+    { step: 2, trackId: '1', action: 'edit', type: 'rhythm' },      // Tercer mensaje - habla de ritmo industrial
+    { step: 4, trackId: '1', action: 'edit', type: 'rhythm' },      // Quinto mensaje - ajustes de bombo
+    { step: 6, trackId: '3', action: 'highlight', type: 'melody' }, // Séptimo mensaje - menciona melodía
+    { step: 7, trackId: '3', action: 'edit', type: 'melody' },      // Octavo mensaje - habla de sintetizadores
+  ];
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -39,6 +58,15 @@ const ChatInterface = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Emitir eventos para activar visualizaciones en las pistas
+  const triggerTrackActivity = (trackId: string, action: 'highlight' | 'edit' | 'reset', type?: 'rhythm' | 'melody' | 'atmosphere') => {
+    const event = new CustomEvent('track-activity', {
+      detail: { trackId, action, type },
+      bubbles: true
+    }) as TrackActivityEvent;
+    document.dispatchEvent(event);
+  };
 
   // Simulate conversation
   useEffect(() => {
@@ -50,7 +78,6 @@ const ChatInterface = () => {
         
         // Update BPM if it's the first user message about 128 BPM techno
         if (simulationStep === 0) {
-          // We would normally dispatch an action or call a function to update project status
           toast({
             title: "BPM actualizado",
             description: "Tempo ajustado a 128 BPM",
@@ -64,6 +91,17 @@ const ChatInterface = () => {
             title: "Aplicando estilo industrial",
             description: "Ajustando parámetros de ritmo",
           });
+        }
+
+        // Buscar y activar actividad visual para este paso
+        const activity = simulationTrackActivity.find(act => act.step === simulationStep);
+        if (activity) {
+          triggerTrackActivity(activity.trackId, activity.action, activity.type);
+          
+          // Para reacciones de edición, también actualizar el estado de reproducción
+          if (activity.action === 'edit') {
+            setIsPlaying(true);
+          }
         }
         
       }, simulationStep % 2 === 0 ? 1000 : 2000); // User messages appear faster than AI responses
@@ -122,6 +160,11 @@ const ChatInterface = () => {
       title: isPlaying ? "Playback paused" : "Playback started",
       description: isPlaying ? "Audio paused" : "Playing your project",
     });
+
+    // Resetear todos los estados visuales cuando se pausa
+    if (!isPlaying) {
+      triggerTrackActivity('all', 'reset');
+    }
   };
 
   const startSimulation = () => {
@@ -129,7 +172,22 @@ const ChatInterface = () => {
     setMessages([{ role: 'assistant', content: 'Hello! I\'m TehorIA, your AI-powered DAW assistant. How can I help with your music production today?' }]);
     setSimulationStep(0);
     setIsSimulating(true);
+    setShowSimulationButton(false); // Ocultar el botón al iniciar la simulación
+    
+    // Resetear cualquier estado visual previo
+    triggerTrackActivity('all', 'reset');
   };
+
+  // Para reiniciar la simulación cuando se completa
+  useEffect(() => {
+    if (!isSimulating && simulationStep >= simulatedConversation.length && !showSimulationButton) {
+      const timer = setTimeout(() => {
+        setShowSimulationButton(true);
+      }, 5000); // Mostrar el botón nuevamente después de 5 segundos
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isSimulating, simulationStep, simulatedConversation.length, showSimulationButton]);
 
   return (
     <div className="flex flex-col h-full">
@@ -178,8 +236,8 @@ const ChatInterface = () => {
         
         <AudioVisualizer isActive={isPlaying} />
 
-        {/* Simulation control */}
-        {!isSimulating && (
+        {/* Simulation control - ahora condicional */}
+        {showSimulationButton && !isSimulating && (
           <div className="flex justify-center">
             <Button 
               onClick={startSimulation}
