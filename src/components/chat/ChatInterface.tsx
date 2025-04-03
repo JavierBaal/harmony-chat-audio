@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Mic, Send, Play, Pause, SkipForward, SkipBack, Volume2 } from 'lucide-react';
@@ -32,15 +33,15 @@ const ChatInterface = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
-  // Simulated conversation flow for the techno track example
+  // Simulated conversation flow for the techno track example with more natural, dubitativa user interactions
   const simulatedConversation = [
     { role: 'user', content: 'Quiero hacer un track de techno oscuro a 128 BPM' },
     { role: 'assistant', content: 'Me gusta la idea. Por tu historial, veo que prefieres empezar con el ritmo y crear atmósferas densas. ¿Te gustaría que empecemos con un patrón de drums inspirado en el estilo Berlin techno que usamos en tu último proyecto? O podemos explorar algo nuevo, quizás con influencias industriales.' },
-    { role: 'user', content: 'Sí, empecemos por el ritmo, pero esta vez quiero algo más industrial' },
+    { role: 'user', content: 'Mmmm... sí, empecemos por el ritmo, pero esta vez quiero algo más industrial. Ya sabes, algo con más... no sé, ¿cómo decirlo? Más sucio, más oscuro, ¿me pillas?' },
     { role: 'assistant', content: 'Vale, vamos a ello. Ya que te gustó cómo quedó la compresión paralela en el último track, la aplicaré sutilmente al bombo mientras trabajamos. Para darle ese toque industrial, sugiero:\n\n1. Un bombo más crudo a 128 BPM\n2. Un patrón de hi-hats metálicos con algo de distorsión\n3. Claps procesados con reverb metálica\n\n¿Por cuál prefieres que empecemos?' },
-    { role: 'user', content: 'El bombo suena bien pero necesita más pegada' },
+    { role: 'user', content: 'El bombo suena bien pero... espera... escuchando otra vez... necesita más pegada, ¿no crees? Algo que te dé en toda la cara, tío.' },
     { role: 'assistant', content: 'Basándome en tu estilo de mezcla anterior, sugiero:\n\n1. Aumentar el ataque con el transient designer que usas frecuentemente\n2. Añadir saturación suave en los graves (sé que prefieres el plugin Saturn para esto)\n3. Un toque de compresión rápida para acentuar el click\n\n¿Cuál probamos primero?' },
-    { role: 'user', content: 'Me gusta cómo va quedando. ¿Qué tal si añadimos algo de melodía?' },
+    { role: 'user', content: '¡Brutal, bro! Ahora sí que está pegando como Dios manda. Me flipa cómo ha quedado el bombo, tío. Mmm... estoy pensando... ¿y si probamos a meter algo de melodía? Algo minimalista pero que hipnotice.' },
     { role: 'assistant', content: 'He notado que en tus últimos tracks de techno, las melodías minimalistas con delays sincronizados funcionaron muy bien. ¿Qué te parece si creamos algo con el Repro-1 (tu sinte favorito para leads) usando:\n\n1. Una secuencia de 2 notas en Dm\n2. Delay ping-pong a negras\n3. Algo de modulación LFO en el filtro\n\nTambién podríamos explorar algo diferente si prefieres salir de tu zona de confort.' },
     { role: 'assistant', content: 'Por cierto, he notado que en tus últimas sesiones, cuando trabajamos con este tipo de atmósferas oscuras, solías añadir texturas ambiente sutiles en el fondo. ¿Te gustaría que exploremos algunas ideas para eso? Tengo algunas sugerencias basadas en lo que ha funcionado bien antes.' }
   ];
