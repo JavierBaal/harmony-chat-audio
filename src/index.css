@@ -1,64 +1,80 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --tehoria-accent: #6d28d9;
-  --tehoria-highlight: #7c3aed;
-  --tehoria-dark: #1a1b26;
-  --tehoria-darker: #13141f;
+@layer base {
+  :root {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    
+    --tehoria-darker: 222 47% 11%;
+    --tehoria-dark: 217 33% 17%;
+    --tehoria-accent: 199 69% 64%;
+    --tehoria-highlight: 180 100% 50%;
+    
+    --radius: 0.5rem;
+  }
 }
 
 @layer base {
+  * {
+    @apply border-border;
+  }
   body {
-    @apply bg-tehoria-dark text-white;
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 
-@layer components {
-  .glass-panel {
-    @apply bg-tehoria-darker bg-opacity-95 border border-tehoria-darker rounded-md;
-  }
-
-  /* Animaciones para la visualización de audio */
-  .visualizer-bar {
-    @apply bg-current rounded-sm;
-    animation: bounceHeight 1.3s ease-in-out infinite alternate;
-  }
-
-  .animate-pulse-soft {
-    animation: pulseSoft 2s infinite ease-in-out;
-  }
-
-  .animate-bounce-subtle {
-    animation: bounceSoft 1s infinite ease-in-out;
-  }
+/* Componentes personalizados */
+.glass-panel {
+  @apply bg-tehoria-darker/50 backdrop-blur-sm rounded-xl border border-tehoria-darker;
 }
 
-@keyframes bounceHeight {
-  0% {
-    height: 10%;
-  }
-  100% {
-    height: 90%;
-  }
+/* Animación de pulso suave para el botón de grabación */
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
 }
 
-@keyframes pulseSoft {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
+.animate-pulse-soft {
+  animation: pulse-soft 1.5s ease-in-out infinite;
 }
 
-@keyframes bounceSoft {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-3px);
-  }
+/* Animación de parpadeo para el cursor de texto */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-blink {
+  animation: blink 0.8s infinite;
 }
