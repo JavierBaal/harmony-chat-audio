@@ -14,6 +14,10 @@ interface TrackActivityEvent extends CustomEvent {
   };
 }
 
+// Track type definition to ensure type safety
+type TrackActivityType = 'rhythm' | 'melody' | 'atmosphere';
+type TrackActivityAction = 'highlight' | 'edit' | 'reset';
+
 const ChatInterface = () => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<any[]>([
@@ -41,13 +45,13 @@ const ChatInterface = () => {
     { role: 'assistant', content: 'Por cierto, he notado que en tus últimas sesiones, cuando trabajamos con este tipo de atmósferas oscuras, solías añadir texturas ambiente sutiles en el fondo. ¿Te gustaría que exploremos algunas ideas para eso? Tengo algunas sugerencias basadas en lo que ha funcionado bien antes.' }
   ];
 
-  // Track activity corresponding to each simulation step
+  // Track activity corresponding to each simulation step with proper typing
   const simulationTrackActivity = [
-    { step: 0, trackId: '1', action: 'highlight' as const, type: 'rhythm' },
-    { step: 2, trackId: '1', action: 'edit' as const, type: 'rhythm' },
-    { step: 4, trackId: '1', action: 'edit' as const, type: 'rhythm' },
-    { step: 6, trackId: '3', action: 'highlight' as const, type: 'melody' },
-    { step: 7, trackId: '3', action: 'edit' as const, type: 'melody' },
+    { step: 0, trackId: '1', action: 'highlight' as TrackActivityAction, type: 'rhythm' as TrackActivityType },
+    { step: 2, trackId: '1', action: 'edit' as TrackActivityAction, type: 'rhythm' as TrackActivityType },
+    { step: 4, trackId: '1', action: 'edit' as TrackActivityAction, type: 'rhythm' as TrackActivityType },
+    { step: 6, trackId: '3', action: 'highlight' as TrackActivityAction, type: 'melody' as TrackActivityType },
+    { step: 7, trackId: '3', action: 'edit' as TrackActivityAction, type: 'melody' as TrackActivityType },
   ];
 
   const scrollToBottom = () => {
@@ -61,8 +65,8 @@ const ChatInterface = () => {
   // Emitir eventos para activar visualizaciones en las pistas
   const triggerTrackActivity = (
     trackId: string, 
-    action: 'highlight' | 'edit' | 'reset', 
-    type?: 'rhythm' | 'melody' | 'atmosphere'
+    action: TrackActivityAction, 
+    type?: TrackActivityType
   ) => {
     const event = new CustomEvent('track-activity', {
       detail: { trackId, action, type },
