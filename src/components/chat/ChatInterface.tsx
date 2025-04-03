@@ -43,11 +43,11 @@ const ChatInterface = () => {
 
   // Track activity corresponding to each simulation step
   const simulationTrackActivity = [
-    { step: 0, trackId: '1', action: 'highlight', type: 'rhythm' }, // Primer mensaje - menciona BPM y techno
-    { step: 2, trackId: '1', action: 'edit', type: 'rhythm' },      // Tercer mensaje - habla de ritmo industrial
-    { step: 4, trackId: '1', action: 'edit', type: 'rhythm' },      // Quinto mensaje - ajustes de bombo
-    { step: 6, trackId: '3', action: 'highlight', type: 'melody' }, // Séptimo mensaje - menciona melodía
-    { step: 7, trackId: '3', action: 'edit', type: 'melody' },      // Octavo mensaje - habla de sintetizadores
+    { step: 0, trackId: '1', action: 'highlight' as const, type: 'rhythm' },
+    { step: 2, trackId: '1', action: 'edit' as const, type: 'rhythm' },
+    { step: 4, trackId: '1', action: 'edit' as const, type: 'rhythm' },
+    { step: 6, trackId: '3', action: 'highlight' as const, type: 'melody' },
+    { step: 7, trackId: '3', action: 'edit' as const, type: 'melody' },
   ];
 
   const scrollToBottom = () => {
@@ -59,7 +59,11 @@ const ChatInterface = () => {
   }, [messages]);
 
   // Emitir eventos para activar visualizaciones en las pistas
-  const triggerTrackActivity = (trackId: string, action: 'highlight' | 'edit' | 'reset', type?: 'rhythm' | 'melody' | 'atmosphere') => {
+  const triggerTrackActivity = (
+    trackId: string, 
+    action: 'highlight' | 'edit' | 'reset', 
+    type?: 'rhythm' | 'melody' | 'atmosphere'
+  ) => {
     const event = new CustomEvent('track-activity', {
       detail: { trackId, action, type },
       bubbles: true
