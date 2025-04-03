@@ -9,7 +9,7 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/componen
 
 const Index = () => {
   const [projectStatus, setProjectStatus] = useState({
-    bpm: 120,
+    bpm: 128, // Updated to match the simulation scenario
     currentTime: "00:00:00",
     trackCount: 4,
     audioLevel: 75

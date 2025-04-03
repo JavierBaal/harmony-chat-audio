@@ -13,9 +13,24 @@ const ChatInterface = () => {
   ]);
   const [isRecording, setIsRecording] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isSimulating, setIsSimulating] = useState(false);
+  const [simulationStep, setSimulationStep] = useState(0);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+
+  // Simulated conversation flow for the techno track example
+  const simulatedConversation = [
+    { role: 'user', content: 'Quiero hacer un track de techno oscuro a 128 BPM' },
+    { role: 'assistant', content: 'Me gusta la idea. Por tu historial, veo que prefieres empezar con el ritmo y crear atmósferas densas. ¿Te gustaría que empecemos con un patrón de drums inspirado en el estilo Berlin techno que usamos en tu último proyecto? O podemos explorar algo nuevo, quizás con influencias industriales.' },
+    { role: 'user', content: 'Sí, empecemos por el ritmo, pero esta vez quiero algo más industrial' },
+    { role: 'assistant', content: 'Vale, vamos a ello. Ya que te gustó cómo quedó la compresión paralela en el último track, la aplicaré sutilmente al bombo mientras trabajamos. Para darle ese toque industrial, sugiero:\n\n1. Un bombo más crudo a 128 BPM\n2. Un patrón de hi-hats metálicos con algo de distorsión\n3. Claps procesados con reverb metálica\n\n¿Por cuál prefieres que empecemos?' },
+    { role: 'user', content: 'El bombo suena bien pero necesita más pegada' },
+    { role: 'assistant', content: 'Basándome en tu estilo de mezcla anterior, sugiero:\n\n1. Aumentar el ataque con el transient designer que usas frecuentemente\n2. Añadir saturación suave en los graves (sé que prefieres el plugin Saturn para esto)\n3. Un toque de compresión rápida para acentuar el click\n\n¿Cuál probamos primero?' },
+    { role: 'user', content: 'Me gusta cómo va quedando. ¿Qué tal si añadimos algo de melodía?' },
+    { role: 'assistant', content: 'He notado que en tus últimos tracks de techno, las melodías minimalistas con delays sincronizados funcionaron muy bien. ¿Qué te parece si creamos algo con el Repro-1 (tu sinte favorito para leads) usando:\n\n1. Una secuencia de 2 notas en Dm\n2. Delay ping-pong a negras\n3. Algo de modulación LFO en el filtro\n\nTambién podríamos explorar algo diferente si prefieres salir de tu zona de confort.' },
+    { role: 'assistant', content: 'Por cierto, he notado que en tus últimas sesiones, cuando trabajamos con este tipo de atmósferas oscuras, solías añadir texturas ambiente sutiles en el fondo. ¿Te gustaría que exploremos algunas ideas para eso? Tengo algunas sugerencias basadas en lo que ha funcionado bien antes.' }
+  ];
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -24,6 +39,40 @@ const ChatInterface = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Simulate conversation
+  useEffect(() => {
+    if (isSimulating && simulationStep < simulatedConversation.length) {
+      const timer = setTimeout(() => {
+        const nextMessage = simulatedConversation[simulationStep];
+        setMessages(prev => [...prev, nextMessage]);
+        setSimulationStep(prev => prev + 1);
+        
+        // Update BPM if it's the first user message about 128 BPM techno
+        if (simulationStep === 0) {
+          // We would normally dispatch an action or call a function to update project status
+          toast({
+            title: "BPM actualizado",
+            description: "Tempo ajustado a 128 BPM",
+          });
+        }
+        
+        // Simulate changing sounds when mentioning industrial drums
+        if (simulationStep === 2) {
+          setIsPlaying(true);
+          toast({
+            title: "Aplicando estilo industrial",
+            description: "Ajustando parámetros de ritmo",
+          });
+        }
+        
+      }, simulationStep % 2 === 0 ? 1000 : 2000); // User messages appear faster than AI responses
+      
+      return () => clearTimeout(timer);
+    } else if (isSimulating && simulationStep >= simulatedConversation.length) {
+      setIsSimulating(false);
+    }
+  }, [isSimulating, simulationStep, toast]);
 
   const handleSendMessage = () => {
     if (!message.trim()) return;
@@ -35,11 +84,11 @@ const ChatInterface = () => {
     // Simulate assistant response after a delay
     setTimeout(() => {
       const assistantResponses = [
-        "I've loaded your project. What would you like to work on first?",
-        "I've added a reverb effect to the vocal track. How does it sound?",
-        "I've created a new MIDI pattern with the chord progression you described. Would you like me to play it?",
-        "I've adjusted the BPM to 120. The rhythm feels better now.",
-        "I've exported your project as a WAV file. You can find it in your project folder."
+        "He ajustado los parámetros según tus preferencias. ¿Qué te parece ahora?",
+        "He aplicado el efecto que sugeriste. ¿Continuamos con la estructura del track?",
+        "He añadido una leve reverb al sintetizador principal. ¿Necesitas que ajuste algo más?",
+        "La mezcla está tomando forma. ¿Te gustaría que refuerce alguna frecuencia en particular?",
+        "He guardado una copia de seguridad de tu proyecto. Podemos explorar diferentes variaciones sin perder tu trabajo."
       ];
       
       const randomResponse = assistantResponses[Math.floor(Math.random() * assistantResponses.length)];
@@ -73,6 +122,13 @@ const ChatInterface = () => {
       title: isPlaying ? "Playback paused" : "Playback started",
       description: isPlaying ? "Audio paused" : "Playing your project",
     });
+  };
+
+  const startSimulation = () => {
+    // Reset conversation and start simulation
+    setMessages([{ role: 'assistant', content: 'Hello! I\'m TehorIA, your AI-powered DAW assistant. How can I help with your music production today?' }]);
+    setSimulationStep(0);
+    setIsSimulating(true);
   };
 
   return (
@@ -121,6 +177,19 @@ const ChatInterface = () => {
         </div>
         
         <AudioVisualizer isActive={isPlaying} />
+
+        {/* Simulation control */}
+        {!isSimulating && (
+          <div className="flex justify-center">
+            <Button 
+              onClick={startSimulation}
+              variant="outline" 
+              className="text-tehoria-accent hover:bg-tehoria-darker/50 text-sm"
+            >
+              Simular conversación de producción techno
+            </Button>
+          </div>
+        )}
       </div>
       
       {/* Chat area */}
@@ -140,6 +209,7 @@ const ChatInterface = () => {
             placeholder="Type a command or question..."
             className="w-full p-3 pr-16 bg-tehoria-darker rounded-lg resize-none focus:outline-none focus:ring-1 focus:ring-tehoria-accent min-h-[60px] max-h-32"
             rows={1}
+            disabled={isSimulating}
           />
           <div className="absolute right-2 flex items-center space-x-2">
             <Button 
@@ -147,6 +217,7 @@ const ChatInterface = () => {
               size="icon" 
               className={`rounded-full ${isRecording ? 'text-red-500 animate-pulse-soft' : 'text-muted-foreground'}`}
               onClick={toggleRecording}
+              disabled={isSimulating}
             >
               <Mic className="h-5 w-5" />
             </Button>
@@ -155,7 +226,7 @@ const ChatInterface = () => {
               size="icon" 
               className="rounded-full bg-tehoria-accent hover:bg-tehoria-highlight"
               onClick={handleSendMessage}
-              disabled={!message.trim()}
+              disabled={!message.trim() || isSimulating}
             >
               <Send className="h-5 w-5" />
             </Button>
