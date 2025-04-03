@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Mic, Send, Play, Pause, SkipForward, SkipBack, Volume2 } from 'lucide-react';
