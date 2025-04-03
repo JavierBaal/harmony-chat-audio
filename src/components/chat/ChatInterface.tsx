@@ -101,18 +101,21 @@ const ChatInterface = () => {
           });
         }
 
-        // Buscar y activar actividad visual para este paso
+        // Find and activate visual activity for this step
         const activity = simulationTrackActivity.find(act => act.step === simulationStep);
         if (activity) {
           triggerTrackActivity(activity.trackId, activity.action, activity.type);
           
-          // Para reacciones de edición, también actualizar el estado de reproducción
+          // For edit reactions, also update playback state
           if (activity.action === 'edit') {
             setIsPlaying(true);
           }
         }
         
-      }, simulationStep % 2 === 0 ? 1000 : 2000); // User messages appear faster than AI responses
+      }, simulationStep % 2 === 0 
+        ? Math.floor(Math.random() * 1500) + 1000  // User messages: 1-2.5 seconds
+        : Math.floor(Math.random() * 2500) + 2000  // AI responses: 2-4.5 seconds
+      );
       
       return () => clearTimeout(timer);
     } else if (isSimulating && simulationStep >= simulatedConversation.length) {
